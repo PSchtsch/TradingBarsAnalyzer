@@ -8,7 +8,7 @@ namespace TradingBarsAnalyzer.Reporter
 {
     internal class PerDayReporter : IReporter
     {
-        public void MakeAndSaveReport(List<TradingBar> tradingBars, string savePath)
+        public void CreateAndSaveReport(List<TradingBar> tradingBars, string savePath)
         {
             throw new NotImplementedException();
         }

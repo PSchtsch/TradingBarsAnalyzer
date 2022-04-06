@@ -33,6 +33,11 @@ namespace TradingBarsAnalyzer
             TotalVolume = Convert.ToInt32(barProperties[8]);
         }
 
+        public override string ToString()
+        {
+            return $"{Symbol},{Description},{Date.ToString("dd.MM.yyyy")},{Time.ToString("HH:mm:ss")},{Open},{High},{Low},{Close},{TotalVolume}";
+        }
+
         public static List<TradingBar> CreateTradingBarsFromFile(string path)
         {
             var file = File.ReadAllText(path);
@@ -49,12 +54,48 @@ namespace TradingBarsAnalyzer
                 tradingBars.Add(new TradingBar(barAsString));
             }
 
-            return tradingBars; 
+            return tradingBars;
         }
 
-        public override string ToString()
+        public static List<TradingBar> GetMinMaxPerDay(List<TradingBar> tradingBars)
         {
-            return $"{Symbol},{Description},{Date},{Time},{Open},{High},{Low},{Close},{TotalVolume}";
+            TradingBar tempMinBar = tradingBars[0];
+            TradingBar tempMaxBar = tradingBars[0];
+
+            var minMax = new List<TradingBar>();
+            var tradingBarsCount = tradingBars.Count;
+            for (int i = 1; i < tradingBarsCount; i++)
+            {
+                var currentBar = tradingBars[i];
+                var previousBar = tradingBars[i - 1];
+
+                if (currentBar.Date != previousBar.Date)
+                {
+                    minMax.Add(tempMinBar);
+                    minMax.Add(tempMaxBar);
+
+                    tempMinBar = currentBar;
+                    tempMaxBar = currentBar;
+                }
+
+                if (currentBar.Low < tempMinBar.Low)
+                {
+                    tempMinBar = currentBar;
+                }
+
+                if (currentBar.High > tempMaxBar.High)
+                {
+                    tempMaxBar = currentBar;
+                }
+
+                if (i == tradingBarsCount)
+                {
+                    minMax.Add(tempMinBar);
+                    minMax.Add(tempMaxBar);
+                }
+            }
+
+            return minMax;
         }
     }
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TradingBarsAnalyzer
 {
-    internal interface IReporter
+    public interface IReporter
     {
-        void MakeAndSaveReport(List<TradingBar> tradingBars, string savePath);
+        void CreateAndSaveReport(List<TradingBar> tradingBars, string savePath);
     }
 }

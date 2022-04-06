@@ -19,6 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="ReportersResults\" />
 		<Folder Include="Resources\" />
 	</ItemGroup>
 
@@ -29,7 +30,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="ReporterResult\" />
+		<None Update="ReportersResults\**">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>
