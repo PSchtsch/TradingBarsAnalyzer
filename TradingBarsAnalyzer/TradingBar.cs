@@ -57,45 +57,6 @@ namespace TradingBarsAnalyzer
             return tradingBars;
         }
 
-        public static List<TradingBar> GetMinMaxPerDay(List<TradingBar> tradingBars)
-        {
-            TradingBar tempMinBar = tradingBars[0];
-            TradingBar tempMaxBar = tradingBars[0];
-
-            var minMax = new List<TradingBar>();
-            var tradingBarsCount = tradingBars.Count;
-            for (int i = 1; i < tradingBarsCount; i++)
-            {
-                var currentBar = tradingBars[i];
-                var previousBar = tradingBars[i - 1];
-
-                if (currentBar.Date != previousBar.Date)
-                {
-                    minMax.Add(tempMinBar);
-                    minMax.Add(tempMaxBar);
-
-                    tempMinBar = currentBar;
-                    tempMaxBar = currentBar;
-                }
-
-                if (currentBar.Low < tempMinBar.Low)
-                {
-                    tempMinBar = currentBar;
-                }
-
-                if (currentBar.High > tempMaxBar.High)
-                {
-                    tempMaxBar = currentBar;
-                }
-
-                if (i == tradingBarsCount)
-                {
-                    minMax.Add(tempMinBar);
-                    minMax.Add(tempMaxBar);
-                }
-            }
-
-            return minMax;
-        }
+        
     }
 }
