@@ -23,32 +23,63 @@ namespace ReporterTests
         [Test]
         public void PerDayReporterTest()
         {
-            var barsPerDay = _tradingBars.GroupByTimeSpan(TimeSpanOptions.Day);
+            var groupedByDays = _tradingBars.GroupByTimeSpan(TimeSpanOptions.Day);
 
             var minMaxPerDay = new List<TradingBar>();
-            foreach (var day in barsPerDay)
+            foreach (var day in groupedByDays)
             {
-                var minMax = day.GetMinMax();
-                minMaxPerDay.Add(minMax.MinimumPrice);
-                minMaxPerDay.Add(minMax.MaximumPrice);
+                var minMaxPriceBar = day.GetMinMaxPriceBar();
+                minMaxPerDay.Add(minMaxPriceBar.MinimumPriceBar);
+                minMaxPerDay.Add(minMaxPriceBar.MaximumPriceBar);
             }
 
             //reporter with simple header
             IReporter reporter = new SimpleReporter();
             string reportPath = @"..\..\..\ReportersResults\PerDayReport.txt";
             reporter.CreateAndSaveReport(minMaxPerDay, reportPath);
-
-            Assert.Pass();
         }
 
         [Test]
         public void PerHourReporterTest()
         {
+            var groupedByHours = _tradingBars.GroupByTimeSpan(TimeSpanOptions.Hour);
+
+            var barPerHours = new List<TradingBar>();
+            foreach (var hour in groupedByHours)
+            {
+                var minMaxPriceBar = hour.GetMinMaxPriceBar();
+                var openClosePriceBar = hour.GetOpenCloseBar();
+                var totalVolume = hour.CalculateTotalVolume();
+
+                var openBar = openClosePriceBar.OpenBar;
+                var symbol = openBar.Symbol;
+                var description = openBar.Description;
+                var date = openBar.Date;
+                var time = openBar.Time;
+                var open = openBar.Open;
+
+                var high = minMaxPriceBar.MaximumPriceBar.High;
+                var low = minMaxPriceBar.MinimumPriceBar.Low;
+
+                var close = openClosePriceBar.CloseBar.Close;
+
+                var barPerHour = new TradingBar(
+                    symbol,
+                    description,
+                    date,
+                    time,
+                    open,
+                    high,
+                    low,
+                    close,
+                    totalVolume);
+
+                barPerHours.Add(barPerHour);
+            }
+
+            IReporter reporter = new SimpleReporter();
             string reportPath = @"..\..\..\ReportersResults\PerHourReport.txt";
-
-            var hmm = AppDomain.CurrentDomain.BaseDirectory;
-
-            Assert.Pass();
+            reporter.CreateAndSaveReport(barPerHours, reportPath);
         }
 
         [Test]

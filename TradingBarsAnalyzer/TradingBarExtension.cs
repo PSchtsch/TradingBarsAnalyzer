@@ -54,7 +54,7 @@ namespace TradingBarsAnalyzer
             }
         }
 
-        public static (TradingBar MinimumPrice, TradingBar MaximumPrice) GetMinMax(this List<TradingBar> tradingBars)
+        public static (TradingBar MinimumPriceBar, TradingBar MaximumPriceBar) GetMinMaxPriceBar(this List<TradingBar> tradingBars)
         {
             TradingBar tempMinBar = tradingBars[0];
             TradingBar tempMaxBar = tradingBars[0];
@@ -76,6 +76,27 @@ namespace TradingBarsAnalyzer
             }
 
             return (tempMinBar, tempMaxBar);
+        }
+
+        public static (TradingBar OpenBar, TradingBar CloseBar) GetOpenCloseBar(this List<TradingBar> tradingBars)
+        {
+            var tradingBarsCount = tradingBars.Count;
+
+            var openPrice = tradingBars[0];
+            var closePrice = tradingBars[tradingBarsCount - 1];
+
+            return (openPrice, closePrice);
+        }
+
+        public static int CalculateTotalVolume(this List<TradingBar> tradingBars)
+        {
+            int totalVolume = 0;
+            foreach (var tradingBar in tradingBars)
+            {
+                totalVolume += tradingBar.TotalVolume;
+            }
+
+            return totalVolume;
         }
     }
 }

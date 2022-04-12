@@ -16,6 +16,30 @@ namespace TradingBarsAnalyzer
         public double Close { get; private set; }
         public int TotalVolume { get; private set; }
 
+        public TradingBar(
+            string symbol,
+            string description,
+            DateOnly date,
+            TimeOnly time,
+            double open,
+            double high,
+            double low,
+            double close,
+            int totalVolume)
+        {
+            Symbol = symbol;
+            Description = description;
+
+            Date = date;
+            Time = time;
+
+            Open = open;
+            High = high;
+            Low = low;
+            Close = close;
+            TotalVolume = totalVolume;
+        }
+
         public TradingBar(string barAsString)
         {
             var barProperties = barAsString.Split(',');
@@ -56,7 +80,5 @@ namespace TradingBarsAnalyzer
 
             return tradingBars;
         }
-
-        
     }
 }
