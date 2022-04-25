@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TradingBarsAnalyzer.Reporter
 {
-    public class SimpleReporter : IReporter
+    public class ReporterWithHeader : IReporter
     {
-        private readonly string _reportHeader = "\"Symbol\",\"Description\",\"Date\",\"Time\",\"Open\",\"High\",\"Low\",\"Close\",\"TotalVolume\"";
+        private readonly string _reportHeader = string.Empty;
 
         public void CreateAndSaveReport(List<TradingBar> tradingBars, string savePath)
         {
@@ -20,6 +20,11 @@ namespace TradingBarsAnalyzer.Reporter
             }
 
             File.WriteAllText(savePath, report.ToString());
+        }
+
+        public ReporterWithHeader(string header)
+        {
+            _reportHeader = header;
         }
     }
 }

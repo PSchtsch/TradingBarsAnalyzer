@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using TradingBarsAnalyzer;
 using TradingBarsAnalyzer.Reporter;
 
@@ -11,12 +12,19 @@ namespace ReporterTests
     public class ReporterTests
     {
         private readonly List<TradingBar> _tradingBars;
+        private readonly List<TradingBar> _tradingBarsCorrupted;
+
+        private readonly string _simpleReporterHeader;
 
         public ReporterTests()
         {
             var soureFilePath = @"Resources\AAPL-IQFeed-SMART-Stocks-Minute-Trade.txt";
+            var corruptedSourceFilePath = @"Resources\AAPL-IQFeed-SMART-Stocks-Minute-Trade-corrupted.txt";
 
             _tradingBars = TradingBar.CreateTradingBarsFromFile(soureFilePath);
+            _tradingBarsCorrupted = TradingBar.CreateTradingBarsFromFile(corruptedSourceFilePath);
+
+            _simpleReporterHeader = "\"Symbol\",\"Description\",\"Date\",\"Time\",\"Open\",\"High\",\"Low\",\"Close\",\"TotalVolume\"";
         }
 
 
@@ -33,8 +41,7 @@ namespace ReporterTests
                 minMaxPerDay.Add(minMaxPriceBar.MaximumPriceBar);
             }
 
-            //reporter with simple header
-            IReporter reporter = new SimpleReporter();
+            IReporter reporter = new ReporterWithHeader(_simpleReporterHeader);
             string reportPath = @"..\..\..\ReportersResults\PerDayReport.txt";
             reporter.CreateAndSaveReport(minMaxPerDay, reportPath);
         }
@@ -77,7 +84,8 @@ namespace ReporterTests
                 barPerHours.Add(barPerHour);
             }
 
-            IReporter reporter = new SimpleReporter();
+
+            IReporter reporter = new ReporterWithHeader(_simpleReporterHeader);
             string reportPath = @"..\..\..\ReportersResults\PerHourReport.txt";
             reporter.CreateAndSaveReport(barPerHours, reportPath);
         }
@@ -85,7 +93,17 @@ namespace ReporterTests
         [Test]
         public void NewAndLostStringCheckerTest()
         {
+            var fineFilePath = @"Resources\AAPL-IQFeed-SMART-Stocks-Minute-Trade.txt";
+            var corruptedFilePath = @"Resources\AAPL-IQFeed-SMART-Stocks-Minute-Trade-corrupted.txt";
 
+            var comparer = new ReportersComparer(fineFilePath, corruptedFilePath);
+
+            var newLines = comparer.FindNewLines();
+            var lostLines = comparer.FindLostLines();
+            var uniqLines = comparer.FindUniqLines();
+
+            
+            
 
             Assert.Pass();
         }
