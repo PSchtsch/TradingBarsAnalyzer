@@ -96,14 +96,13 @@ namespace ReporterTests
             var fineFilePath = @"Resources\AAPL-IQFeed-SMART-Stocks-Minute-Trade.txt";
             var corruptedFilePath = @"Resources\AAPL-IQFeed-SMART-Stocks-Minute-Trade-corrupted.txt";
 
-            var comparer = new ReportersComparer(fineFilePath, corruptedFilePath);
+            var linesSeparator = Environment.NewLine;
+            var comparer = new ReportersComparer(fineFilePath, corruptedFilePath, linesSeparator);
 
-            var newLines = comparer.FindNewLines();
-            var lostLines = comparer.FindLostLines();
-            var uniqLines = comparer.FindUniqLines();
+            var newLines = comparer.GetNewLines();
+            var lostLines = comparer.GetLostLines();
+            var uniqueLines = comparer.GetUniqueLines();
 
-            
-            
 
             Assert.Pass();
         }

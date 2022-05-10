@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,29 +9,57 @@ namespace TradingBarsAnalyzer.Reporter
     {
         private readonly string _sourceFilePath;
         private readonly string _targetFilePath;
+        private readonly string _linesSeparator;
 
-        public ReportersComparer(string sourceFilePath, string targetFilePath)
+        public ReportersComparer(string sourceFilePath, string targetFilePath, string linesSeparator = "\n")
         {
             _sourceFilePath = sourceFilePath;
             _targetFilePath = targetFilePath;
+            _linesSeparator = linesSeparator;
         }
 
-        public List<string> FindNewLines()
+        public List<string> GetNewLines()
         {
-            List<string> lines = new List<string>();
-            return lines;
+            var sourceLines = ReadAndSplit(_sourceFilePath, _linesSeparator);
+            var targetLines = ReadAndSplit(_targetFilePath, _linesSeparator);
+
+            var sourceLinesHash = new HashSet<string>(sourceLines);
+            var targetLinesHash = new HashSet<string>(targetLines);
+
+            targetLinesHash.ExceptWith(sourceLinesHash);
+
+            return targetLinesHash.ToList();
         }
 
-        public List<string> FindLostLines()
+        public List<string> GetLostLines()
         {
-            List<string> lines = new List<string>();
-            return lines;
+            var sourceLines = ReadAndSplit(_sourceFilePath, _linesSeparator);
+            var targetLines = ReadAndSplit(_targetFilePath, _linesSeparator);
+
+            var sourceLinesHash = new HashSet<string>(sourceLines);
+            var targetLinesHash = new HashSet<string>(targetLines);
+
+            sourceLinesHash.ExceptWith(targetLinesHash);
+
+            return sourceLinesHash.ToList();
         }
 
-        public List<string> FindUniqLines()
+        public List<string> GetUniqueLines()
         {
-            List<string> lines = new List<string>();
-            return lines;
+            var lostLinesHash = new HashSet<string>(GetLostLines());
+            var newLinesHash = new HashSet<string>(GetNewLines());
+
+            lostLinesHash.UnionWith(newLinesHash);
+
+            return lostLinesHash.ToList();
+        }
+
+        private List<string> ReadAndSplit(string filePath, string linesSeparator)
+        {
+            var content = File.ReadAllText(filePath);
+            var reporterLines = content.Split(linesSeparator).ToList();
+
+            return reporterLines;
         }
     }
 }
