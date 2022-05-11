@@ -8,6 +8,6 @@ namespace TradingBarsAnalyzer
 {
     public interface IReporter
     {
-        void CreateAndSaveReport(List<TradingBar> tradingBars, string savePath);
+        void CreateAndSaveReport(List<string> contentLines, string savePath);
     }
 }

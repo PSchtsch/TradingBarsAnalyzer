@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -97,6 +96,17 @@ namespace TradingBarsAnalyzer
             }
 
             return totalVolume;
+        }
+
+        public static List<string> ToStrings(this List<TradingBar> tradingBars)
+        {
+            List<string> barsAsStrings = new List<string>();
+            foreach (var tradingBar in tradingBars)
+            {
+                barsAsStrings.Add(tradingBar.ToString());
+            }
+
+            return barsAsStrings;
         }
     }
 }

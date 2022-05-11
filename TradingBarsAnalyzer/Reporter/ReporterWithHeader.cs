@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,21 +9,21 @@ namespace TradingBarsAnalyzer.Reporter
     {
         private readonly string _reportHeader = string.Empty;
 
-        public void CreateAndSaveReport(List<TradingBar> tradingBars, string savePath)
-        {
-            var report = new StringBuilder();
-            report.AppendLine(_reportHeader);
-            foreach (var tradingBar in tradingBars)
-            {
-                report.AppendLine(tradingBar.ToString());
-            }
-
-            File.WriteAllText(savePath, report.ToString());
-        }
-
         public ReporterWithHeader(string header)
         {
             _reportHeader = header;
+        }
+
+        public void CreateAndSaveReport(List<string> contentLines, string savePath)
+        {
+            var report = new StringBuilder();
+            report.AppendLine(_reportHeader);
+            foreach (var contentLine in contentLines)
+            {
+                report.AppendLine(contentLine);
+            }
+
+            File.WriteAllText(savePath, report.ToString());
         }
     }
 }

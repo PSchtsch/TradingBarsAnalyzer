@@ -12,17 +12,14 @@ namespace ReporterTests
     public class ReporterTests
     {
         private readonly List<TradingBar> _tradingBars;
-        private readonly List<TradingBar> _tradingBarsCorrupted;
-
         private readonly string _simpleReporterHeader;
 
         public ReporterTests()
         {
             var soureFilePath = @"Resources\AAPL-IQFeed-SMART-Stocks-Minute-Trade.txt";
-            var corruptedSourceFilePath = @"Resources\AAPL-IQFeed-SMART-Stocks-Minute-Trade-corrupted.txt";
 
-            _tradingBars = TradingBar.CreateTradingBarsFromFile(soureFilePath);
-            _tradingBarsCorrupted = TradingBar.CreateTradingBarsFromFile(corruptedSourceFilePath);
+            var linesSeparator = Environment.NewLine;
+            _tradingBars = TradingBar.CreateTradingBarsFromFile(soureFilePath, linesSeparator);
 
             _simpleReporterHeader = "\"Symbol\",\"Description\",\"Date\",\"Time\",\"Open\",\"High\",\"Low\",\"Close\",\"TotalVolume\"";
         }
@@ -43,7 +40,7 @@ namespace ReporterTests
 
             IReporter reporter = new ReporterWithHeader(_simpleReporterHeader);
             string reportPath = @"..\..\..\ReportersResults\PerDayReport.txt";
-            reporter.CreateAndSaveReport(minMaxPerDay, reportPath);
+            reporter.CreateAndSaveReport(minMaxPerDay.ToStrings(), reportPath);
         }
 
         [Test]
@@ -84,10 +81,9 @@ namespace ReporterTests
                 barPerHours.Add(barPerHour);
             }
 
-
             IReporter reporter = new ReporterWithHeader(_simpleReporterHeader);
             string reportPath = @"..\..\..\ReportersResults\PerHourReport.txt";
-            reporter.CreateAndSaveReport(barPerHours, reportPath);
+            reporter.CreateAndSaveReport(barPerHours.ToStrings(), reportPath);
         }
 
         [Test]
@@ -103,6 +99,16 @@ namespace ReporterTests
             var lostLines = comparer.GetLostLines();
             var uniqueLines = comparer.GetUniqueLines();
 
+            IReporter reporter = new ReporterWithHeader(string.Empty);
+
+            string newLinesReportPath = @"..\..\..\ReportersResults\NewLinesReport.txt";
+            reporter.CreateAndSaveReport(newLines, newLinesReportPath);
+
+            string lostLinesReportPath = @"..\..\..\ReportersResults\LostLinesReport.txt";
+            reporter.CreateAndSaveReport(lostLines, lostLinesReportPath);
+
+            string uniqueLinesReportPath = @"..\..\..\ReportersResults\UniqueLinesReport.txt";
+            reporter.CreateAndSaveReport(uniqueLines, uniqueLinesReportPath);
 
             Assert.Pass();
         }

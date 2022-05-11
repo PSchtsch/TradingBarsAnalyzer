@@ -20,8 +20,8 @@ namespace TradingBarsAnalyzer.Reporter
 
         public List<string> GetNewLines()
         {
-            var sourceLines = ReadAndSplit(_sourceFilePath, _linesSeparator);
-            var targetLines = ReadAndSplit(_targetFilePath, _linesSeparator);
+            var sourceLines = TradingBar.ReadAndSplit(_sourceFilePath, _linesSeparator);
+            var targetLines = TradingBar.ReadAndSplit(_targetFilePath, _linesSeparator);
 
             var sourceLinesHash = new HashSet<string>(sourceLines);
             var targetLinesHash = new HashSet<string>(targetLines);
@@ -33,8 +33,8 @@ namespace TradingBarsAnalyzer.Reporter
 
         public List<string> GetLostLines()
         {
-            var sourceLines = ReadAndSplit(_sourceFilePath, _linesSeparator);
-            var targetLines = ReadAndSplit(_targetFilePath, _linesSeparator);
+            var sourceLines = TradingBar.ReadAndSplit(_sourceFilePath, _linesSeparator);
+            var targetLines = TradingBar.ReadAndSplit(_targetFilePath, _linesSeparator);
 
             var sourceLinesHash = new HashSet<string>(sourceLines);
             var targetLinesHash = new HashSet<string>(targetLines);
@@ -52,14 +52,6 @@ namespace TradingBarsAnalyzer.Reporter
             lostLinesHash.UnionWith(newLinesHash);
 
             return lostLinesHash.ToList();
-        }
-
-        private List<string> ReadAndSplit(string filePath, string linesSeparator)
-        {
-            var content = File.ReadAllText(filePath);
-            var reporterLines = content.Split(linesSeparator).ToList();
-
-            return reporterLines;
         }
     }
 }

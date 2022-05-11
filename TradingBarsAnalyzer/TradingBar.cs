@@ -62,23 +62,20 @@ namespace TradingBarsAnalyzer
             return $"{Symbol},{Description},{Date.ToString("dd.MM.yyyy")},{Time.ToString("HH:mm:ss")},{Open},{High},{Low},{Close},{TotalVolume}";
         }
 
-        public static List<TradingBar> CreateTradingBarsFromFile(string path)
+        public static List<TradingBar> CreateTradingBarsFromFile(string path, string linesSeparator)
         {
-            var file = File.ReadAllText(path);
-            var barsAsStrings = file.Split(Environment.NewLine);
-
-            var tradingBars = new List<TradingBar>();
-            foreach (var barAsString in barsAsStrings)
-            {
-                if (barAsString.IsReportHeader() || string.IsNullOrEmpty(barAsString))
-                {
-                    continue;
-                }
-
-                tradingBars.Add(new TradingBar(barAsString));
-            }
+            var fileLines = ReadAndSplit(path, linesSeparator);
+            var tradingBars = fileLines.ToTradingBars();
 
             return tradingBars;
+        }
+
+        public static List<string> ReadAndSplit(string filePath, string linesSeparator)
+        {
+            var content = File.ReadAllText(filePath);
+            var lines = content.Split(linesSeparator).ToList();
+
+            return lines;
         }
     }
 }

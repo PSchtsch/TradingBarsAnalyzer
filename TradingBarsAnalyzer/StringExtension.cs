@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,10 +7,25 @@ namespace TradingBarsAnalyzer
 {
     public static class StringExtension
     {
-        public static bool IsReportHeader(this string barAsString)
+        public static List<TradingBar> ToTradingBars(this List<string> lines)
         {
-            var header = @"""Symbol"",""Description"",""Date"",""Time"",""Open"",""High"",""Low"",""Close"",""TotalVolume""";
-            return barAsString == header;
+            TradingBar tradingBar;
+            var tradingBars = new List<TradingBar>();
+            foreach (var line in lines)
+            {
+                try
+                {
+                    tradingBar = new TradingBar(line);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+
+                tradingBars.Add(tradingBar);
+            }
+
+            return tradingBars;
         }
     }
 }
