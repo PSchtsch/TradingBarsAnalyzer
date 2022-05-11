@@ -99,7 +99,7 @@ namespace ReporterTests
             var lostLines = comparer.GetLostLines();
             var uniqueLines = comparer.GetUniqueLines();
 
-            IReporter reporter = new ReporterWithHeader(string.Empty);
+            IReporter reporter = new ReporterWithoutHeader();
 
             string newLinesReportPath = @"..\..\..\ReportersResults\NewLinesReport.txt";
             reporter.CreateAndSaveReport(newLines, newLinesReportPath);
