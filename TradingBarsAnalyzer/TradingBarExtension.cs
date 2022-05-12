@@ -53,6 +53,19 @@ namespace TradingBarsAnalyzer
             }
         }
 
+        public static List<TradingBar> GetMinMaxPriceBars(this List<List<TradingBar>> groupedTradingBars)
+        {
+            var minMaxInGroup = new List<TradingBar>();
+            foreach (var group in groupedTradingBars)
+            {
+                var minMaxPriceBar = group.GetMinMaxPriceBar();
+                minMaxInGroup.Add(minMaxPriceBar.MinimumPriceBar);
+                minMaxInGroup.Add(minMaxPriceBar.MaximumPriceBar);
+            }
+
+            return minMaxInGroup;
+        }
+
         public static (TradingBar MinimumPriceBar, TradingBar MaximumPriceBar) GetMinMaxPriceBar(this List<TradingBar> tradingBars)
         {
             TradingBar tempMinBar = tradingBars[0];
@@ -75,6 +88,50 @@ namespace TradingBarsAnalyzer
             }
 
             return (tempMinBar, tempMaxBar);
+        }
+
+        public static List<TradingBar> ConvertToRangesBars(this List<List<TradingBar>> groupedTradingBars)
+        {
+            List<TradingBar> rangesBars = new List<TradingBar>();
+            foreach (var group in groupedTradingBars)
+            {
+                var rangeBar = group.ConvertToRangeBar();
+                rangesBars.Add(rangeBar);
+            }
+
+            return rangesBars;
+        }
+
+        public static TradingBar ConvertToRangeBar(this List<TradingBar> tradingBars)
+        {
+            var minMaxPriceBar = tradingBars.GetMinMaxPriceBar();
+            var openClosePriceBar = tradingBars.GetOpenCloseBar();
+            var totalVolume = tradingBars.CalculateTotalVolume();
+
+            var openBar = openClosePriceBar.OpenBar;
+            var symbol = openBar.Symbol;
+            var description = openBar.Description;
+            var date = openBar.Date;
+            var time = openBar.Time;
+            var open = openBar.Open;
+
+            var high = minMaxPriceBar.MaximumPriceBar.High;
+            var low = minMaxPriceBar.MinimumPriceBar.Low;
+
+            var close = openClosePriceBar.CloseBar.Close;
+
+            var rangeAsBar = new TradingBar(
+                symbol,
+                description,
+                date,
+                time,
+                open,
+                high,
+                low,
+                close,
+                totalVolume);
+
+            return rangeAsBar;
         }
 
         public static (TradingBar OpenBar, TradingBar CloseBar) GetOpenCloseBar(this List<TradingBar> tradingBars)
