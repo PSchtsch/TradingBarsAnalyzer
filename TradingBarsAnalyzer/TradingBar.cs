@@ -62,18 +62,18 @@ namespace TradingBarsAnalyzer
             return $"{Symbol},{Description},{Date.ToString("dd.MM.yyyy")},{Time.ToString("HH:mm:ss")},{Open},{High},{Low},{Close},{TotalVolume}";
         }
 
-        public static List<TradingBar> CreateTradingBarsFromFile(string path, string linesSeparator)
+        public static async Task<List<TradingBar>> CreateTradingBarsFromFileAsync(string path, string linesSeparator)
         {
-            var fileLines = ReadAndSplit(path, linesSeparator);
+            var fileLines = await ReadAndSplitAsync(path, linesSeparator);
             var tradingBars = fileLines.ToTradingBars();
 
             return tradingBars;
         }
 
-        public static List<string> ReadAndSplit(string filePath, string linesSeparator)
+        public static async Task<List<string>> ReadAndSplitAsync(string filePath, string linesSeparator)
         {
-            var content = File.ReadAllText(filePath);
-            var lines = content.Split(linesSeparator).ToList();
+            var content = await Task.Run(() => File.ReadAllText(filePath));
+            var lines = await Task.Run(() => content.Split(linesSeparator).ToList());
 
             return lines;
         }

@@ -18,36 +18,39 @@ namespace TradingBarsAnalyzer.Reporter
             _linesSeparator = linesSeparator;
         }
 
-        public List<string> GetNewLines()
+        public async Task<List<string>> GetNewLinesAsync()
         {
-            var sourceLines = TradingBar.ReadAndSplit(_sourceFilePath, _linesSeparator);
-            var targetLines = TradingBar.ReadAndSplit(_targetFilePath, _linesSeparator);
+            var sourceLines = TradingBar.ReadAndSplitAsync(_sourceFilePath, _linesSeparator);
+            var targetLines = TradingBar.ReadAndSplitAsync(_targetFilePath, _linesSeparator);
 
-            var sourceLinesHash = new HashSet<string>(sourceLines);
-            var targetLinesHash = new HashSet<string>(targetLines);
+            var sourceLinesHash = new HashSet<string>(await sourceLines);
+            var targetLinesHash = new HashSet<string>(await targetLines);
 
             targetLinesHash.ExceptWith(sourceLinesHash);
 
             return targetLinesHash.ToList();
         }
 
-        public List<string> GetLostLines()
+        public async Task<List<string>> GetLostLinesAsync()
         {
-            var sourceLines = TradingBar.ReadAndSplit(_sourceFilePath, _linesSeparator);
-            var targetLines = TradingBar.ReadAndSplit(_targetFilePath, _linesSeparator);
+            var sourceLines = TradingBar.ReadAndSplitAsync(_sourceFilePath, _linesSeparator);
+            var targetLines = TradingBar.ReadAndSplitAsync(_targetFilePath, _linesSeparator);
 
-            var sourceLinesHash = new HashSet<string>(sourceLines);
-            var targetLinesHash = new HashSet<string>(targetLines);
+            var sourceLinesHash = new HashSet<string>(await sourceLines);
+            var targetLinesHash = new HashSet<string>(await targetLines);
 
             sourceLinesHash.ExceptWith(targetLinesHash);
 
             return sourceLinesHash.ToList();
         }
 
-        public List<string> GetUniqueLines()
+        public async Task<List<string>> GetUniqueLinesAsync()
         {
-            var lostLinesHash = new HashSet<string>(GetLostLines());
-            var newLinesHash = new HashSet<string>(GetNewLines());
+            var lostLines = GetLostLinesAsync();
+            var newLines = GetNewLinesAsync();
+
+            var lostLinesHash = new HashSet<string>(await lostLines);
+            var newLinesHash = new HashSet<string>(await newLines);
 
             lostLinesHash.UnionWith(newLinesHash);
 
