@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace TradingBarsAnalyzer
+﻿namespace TradingBarsAnalyzer
 {
     public class TradingBar
     {

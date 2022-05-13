@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TradingBarsAnalyzer.Reporter
+﻿namespace TradingBarsAnalyzer.Reporter
 {
     public class ReportersComparer
     {
