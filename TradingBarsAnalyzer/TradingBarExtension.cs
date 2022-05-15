@@ -85,6 +85,16 @@
             return (tempMinBar, tempMaxBar);
         }
 
+        /// <summary>
+        /// Trading bars with special properties:
+        /// Open - price which range starts with, 
+        /// Close - price which range ends with, 
+        /// High - max price on range, 
+        /// Low - minimum price on range, 
+        /// TotalVolume - sum of Volumes on range
+        /// </summary>
+        /// <param name="groupedTradingBars"></param>
+        /// <returns></returns>
         public static List<TradingBar> ConvertToRangesBars(this List<List<TradingBar>> groupedTradingBars)
         {
             List<TradingBar> rangesBars = new List<TradingBar>();
@@ -97,6 +107,16 @@
             return rangesBars;
         }
 
+        /// <summary>
+        /// Trading bar with special properties:
+        /// Open - price which range starts with, 
+        /// Close - price which range ends with, 
+        /// High - max price on range, 
+        /// Low - minimum price on range, 
+        /// TotalVolume - sum of Volumes on range
+        /// </summary>
+        /// <param name="tradingBars"></param>
+        /// <returns></returns>
         public static TradingBar ConvertToRangeBar(this List<TradingBar> tradingBars)
         {
             var minMaxPriceBar = tradingBars.GetMinMaxPriceBar();
